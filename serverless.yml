@@ -1,0 +1,32 @@
+service: practice-serverless # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: python3.7
+  versionFunctions: false # tells aws lambda not to store multiple versions of function
+  memorySize: 128
+  region: us-west-2 # cheaper and has more bells and whistles
+  profile: serverless-test
+
+custom:
+  wsgi:
+    app: practice-serverless.foo.run.app
+    packRequirements: false
+
+functions:
+  hello:
+    handler: handler.hello
+    events:
+      - http:
+          path: /hello
+          method: get
+
+  flask:
+    handler: wsgi_handler.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
