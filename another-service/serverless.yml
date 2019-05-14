@@ -1,0 +1,19 @@
+service: another-service # NOTE: update this with your service name
+
+provider:
+  name: aws
+  runtime: python3.7
+  versionFunctions: false # tells aws lambda not to store multiple versions of function
+  memorySize: 128
+  stage: dev
+  region: us-west-2 # cheaper and has more bells and whistles
+  apiName: do-stuff-api-name-${self:provider.stage}
+  profile: serverless-test
+
+functions:
+  stuff:
+    handler: handler.stuff
+    events:
+      - http:
+          path: /
+          method: get

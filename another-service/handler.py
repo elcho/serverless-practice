@@ -1,8 +1,8 @@
-def hello(event, context):
+def stuff(event, context):
     try:
         return dict(
             statusCode=200,
-            body='HELLO FROM SERVERLESS FUNCTION!!'
+            body='VERY COOL!!'
         )
     except Exception as e:
         return dict(
