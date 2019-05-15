@@ -22,7 +22,7 @@ functions:
   weather:
     handler: handler.weather
     layers:
-      - arn:aws:lambda:us-west-2:064892837453:layer:jwtLib:4
+      - ${file(./serverless.env.yml) :JWT_LAYER}
     environment:
       APIXU_WEATHER_API_KEY: ${self:custom.environment.APIXU_WEATHER_API_KEY.${self:custom.currentStage}}
     events:
@@ -40,6 +40,9 @@ functions:
       - http:
           path: /jwt
           method: get
+      - stream:
+          type: kinesis
+          arn: ${file(./serverless.env.yml) :KINESIS_TESTING_STREAM}
 
 plugins:
   - serverless-python-requirements
