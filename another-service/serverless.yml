@@ -11,9 +11,25 @@ provider:
   profile: serverless-test
 
 functions:
-  stuff:
-    handler: handler.stuff
+  weather:
+    handler: handler.weather
+    layers:
+      - arn:aws:lambda:us-west-2:064892837453:layer:jwtLib:4
+    environment:
+      APIXU_WEATHER_API_KEY: ${file(./serverless.env.yml) :APIXU_WEATHER_API_KEY}
     events:
       - http:
-          path: /
+          path: /forecast
           method: get
+
+  jwt:
+    handler: handler.jwt
+    layers:
+      - arn:aws:lambda:us-west-2:064892837453:layer:jwtLib:4
+    events:
+      - http:
+          path: /jwt
+          method: get
+
+plugins:
+  - serverless-python-requirements

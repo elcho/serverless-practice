@@ -12,7 +12,7 @@ provider:
 
 custom:
   wsgi:
-    app: practice-serverless.foo.run.app
+    app: foo.run.app
     packRequirements: false
 
 functions:
@@ -26,7 +26,6 @@ functions:
   flask:
     handler: wsgi_handler.handler
     events:
-      - http: ANY /
       - http: 'ANY {proxy+}'
 
 plugins:

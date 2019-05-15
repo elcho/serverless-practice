@@ -2,7 +2,7 @@ def hello(event, context):
     try:
         return dict(
             statusCode=200,
-            body='HELLO FROM MY VERY OWN SERVERLESS FUNCTION!!'
+            body='HELLO FROM MY SERVERLESS FUNC!!'
         )
     except Exception as e:
         return dict(

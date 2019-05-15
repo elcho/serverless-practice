@@ -8,10 +8,7 @@ name = "pypi"
 [packages]
 
 Flask = "*"
-Requests = "*"
 python-dotenv = "*"
-#python_jwt = "*"
-PyJWT = "*"
 
 
 [dev-packages]
