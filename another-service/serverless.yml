@@ -6,9 +6,17 @@ provider:
   versionFunctions: false # tells aws lambda not to store multiple versions of function
   memorySize: 128
   stage: dev
-  region: us-west-2 # cheaper and has more bells and whistles
-  apiName: do-stuff-api-name-${self:provider.stage}
+  region: us-west-2 # cheaper and has more bells and whistles (not that I need them..)
+  apiName: do-stuff-${opt:stage, self:provider.stage} # the first param looks for the cli --stage command, otherwise defaults to self.provider.stage
   profile: serverless-test
+
+custom:
+  currentStage: ${opt:stage, self:provider.stage}
+  environment:
+    APIXU_WEATHER_API_KEY:
+      prod: ${file(./serverless.env.yml) :APIXU_WEATHER_API_KEY}
+    SECRET_VAR:
+      dev: ${file(./serverless.env.yml) :SECRET_VAR}
 
 functions:
   weather:
@@ -16,7 +24,7 @@ functions:
     layers:
       - arn:aws:lambda:us-west-2:064892837453:layer:jwtLib:4
     environment:
-      APIXU_WEATHER_API_KEY: ${file(./serverless.env.yml) :APIXU_WEATHER_API_KEY}
+      APIXU_WEATHER_API_KEY: ${self:custom.environment.APIXU_WEATHER_API_KEY.${self:custom.currentStage}}
     events:
       - http:
           path: /forecast
@@ -26,6 +34,8 @@ functions:
     handler: handler.jwt
     layers:
       - arn:aws:lambda:us-west-2:064892837453:layer:jwtLib:4
+    environment:
+      SECRET_VAR: ${self:custom.environment.SECRET_VAR.${self:custom.currentStage}}
     events:
       - http:
           path: /jwt
